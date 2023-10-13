@@ -107,7 +107,7 @@ class Birthday(Field):
 class AddressBook(UserDict):
     def __init__(self):
         self.data = {}
-        self.page_size = 10  # кількість записів на сторінці
+        self.page_size = 10  
 
     def iterator(self):
         page = 0  
