@@ -80,7 +80,7 @@ class Record:
 
     def add_phone(self, phone_number):
         phone = Phone(phone_number)
-        self.emails.append(phone)
+        self.phones.append(phone)
 
     def remove_phone(self, phone_number):
         self.phones = [phone for phone in self.phones if phone.value != phone_number]
