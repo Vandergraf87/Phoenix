@@ -35,11 +35,48 @@ class Phone(Field):
             raise ValueError("Invalid phone number format")
         self._value = new_phone_number
 
+
+class Email(Field):
+    def __init__(self, contact_email):
+        if not self.validate_contact_email(contact_email):
+            raise ValueError("Invalid email format")
+        super().__init__(contact_email)
+
+    @staticmethod
+    def validate_contact_email(contact_email):
+        email_pattern = r"[A-Za-z]+[\.?\w+]+@\w+\.\w{2,}"
+        return len(re.findall(email_pattern, contact_email)) > 0
+    
+    @Field.value.setter
+    def value(self, new_contact_email):
+        if not self.validate_contact_email(new_contact_email):
+            raise ValueError("Invalid email format")
+        self._value = new_contact_email
+
+
 class Record:
     def __init__(self, name, birthday=None):
         self.name = Name(name)
         self.phones = []
+        self.emails = []
         self.birthday = Birthday(birthday) if birthday else None
+
+    def add_email(self, contact_email):
+        email = Email(contact_email)
+        self.emails.append(email)
+
+    def edit_email(self, old_contact_email, new_contact_email):
+        if not Email.validate_contact_email(new_contact_email):
+            raise ValueError("Invalid email format")
+        
+        found = False
+        for email in self.emails:
+            if email.value == old_contact_email:
+                email.value = new_contact_email
+                found = True
+        
+        if not found:
+            raise ValueError("Such email not found in the record")
 
     def add_phone(self, phone_number):
         phone = Phone(phone_number)
